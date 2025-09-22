@@ -118,6 +118,28 @@ public class ScoreboardTest {
 
     @Test
     void getSummary_shouldReturnGamesInCorrectOrder() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
+        scoreboard.startGame("Mexico", "Canada");
+        scoreboard.startGame("Spain", "Brazil");
+        scoreboard.startGame("Germany", "France");
+        scoreboard.startGame("Belarus", "USA");
+        scoreboard.updateScore("Mexico", "Canada", 0, 5);
+        scoreboard.updateScore("Spain", "Brazil", 10, 2);
+        scoreboard.updateScore("Belarus", "USA", 6, 6);
 
+        // when
+        final List<Game> summary = scoreboard.getSummary();
+
+        // then
+        assertThat(summary.size()).isEqualTo(4);
+        assertThat(summary.get(0).getHomeTeam()).isEqualTo("Spain");
+        assertThat(summary.get(0).getAwayTeam()).isEqualTo("Brazil");
+        assertThat(summary.get(1).getHomeTeam()).isEqualTo("Belarus");
+        assertThat(summary.get(1).getAwayTeam()).isEqualTo("USA");
+        assertThat(summary.get(2).getHomeTeam()).isEqualTo("Mexico");
+        assertThat(summary.get(2).getAwayTeam()).isEqualTo("Canada");
+        assertThat(summary.get(3).getHomeTeam()).isEqualTo("Germany");
+        assertThat(summary.get(3).getHomeTeam()).isEqualTo("France");
     }
 }
