@@ -107,8 +107,13 @@ public class ScoreboardTest {
     }
 
     @Test
-    void updateScore_givenNonExistingGameName_shouldThrowException() {
+    void updateScore_givenNonExistingTeamName_shouldThrowGameNotFoundException() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
+        scoreboard.startGame("Mexico", "Poland");
 
+        // when & then
+        assertThrows(GameNotFoundException.class, () -> scoreboard.updateScore("Argentina", "Poland", 1, 1));
     }
 
     @Test
