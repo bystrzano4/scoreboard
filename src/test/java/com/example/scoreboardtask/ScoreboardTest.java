@@ -32,7 +32,7 @@ public class ScoreboardTest {
     }
 
     @Test
-    void startGame_givenDuplicatedTeamNames_shouldThrowException() {
+    void startGame_givenDuplicatedTeamNames_shouldThrowDuplicatedTeamNameException() {
         // given
         final Scoreboard scoreboard = new Scoreboard();
 
@@ -40,7 +40,12 @@ public class ScoreboardTest {
         scoreboard.startGame("Mexico", "Poland");
 
         // then
-        assertThrows(DuplicatedTeamNameException.class, () -> scoreboard.startGame("Mexico", "Brazil"));
+        final DuplicatedTeamNameException duplicatedTeamNameException = assertThrows(
+            DuplicatedTeamNameException.class,
+            () -> scoreboard.startGame("Poland", "Mexico")
+        );
+        final String message = duplicatedTeamNameException.getMessage();
+        assertThat(message).isEqualTo("Duplicated team names: Poland, Mexico");
     }
 
     @Test
