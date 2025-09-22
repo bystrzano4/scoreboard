@@ -84,7 +84,21 @@ public class ScoreboardTest {
 
     @Test
     void updateScore_shouldUpdateScoreSuccessfully() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
+        scoreboard.startGame("Mexico", "Poland");
 
+        // when
+        scoreboard.updateScore("Mexico", "Poland", 1, 0);
+
+        // then
+        final List<Game> summary = scoreboard.getSummary();
+        assertThat(summary.size()).isEqualTo(1);
+        final Game game = summary.get(0);
+        assertThat(game.getHomeTeam()).isEqualTo("Mexico");
+        assertThat(game.getAwayTeam()).isEqualTo("Poland");
+        assertThat(game.getHomeScore()).isEqualTo(1);
+        assertThat(game.getAwayScore()).isEqualTo(0);
     }
 
     @Test

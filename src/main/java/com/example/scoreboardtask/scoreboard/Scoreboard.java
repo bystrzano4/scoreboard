@@ -24,6 +24,10 @@ public class Scoreboard {
         games.remove(game);
     }
 
+    public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
+
+    }
+
     public List<Game> getSummary() {
         return games;
     }
