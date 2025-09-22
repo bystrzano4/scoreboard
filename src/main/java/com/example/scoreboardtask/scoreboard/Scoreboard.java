@@ -1,17 +1,27 @@
 package com.example.scoreboardtask.scoreboard;
 
+import com.example.scoreboardtask.date.DateProvider;
 import com.example.scoreboardtask.scoreboard.error.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Scoreboard {
 
     private final List<Game> games = new ArrayList<>();
+    private final DateProvider dateProvider;
+
+    public Scoreboard() {
+        this.dateProvider = new DateProvider();
+    }
+
+    public Scoreboard(final DateProvider dateProvider) {
+        this.dateProvider = dateProvider;
+    }
 
     public void startGame(String homeTeam, String awayTeam) {
         validateTeamsUniqueness(homeTeam, awayTeam);
-        final Game game = new Game(homeTeam, awayTeam, 0, 0);
+        final Game game = new Game(homeTeam, awayTeam, 0, 0, dateProvider.getLocalDateTime());
         games.add(game);
     }
 
@@ -24,12 +34,19 @@ public class Scoreboard {
         validateScores(homeScore, awayScore);
         final Game game = findGameByHomeAndAwayTeam(homeTeam, awayTeam);
         games.remove(game);
-        final Game updatedGame = new Game(homeTeam, awayTeam, homeScore, awayScore);
+        final Game updatedGame = new Game(homeTeam, awayTeam, homeScore, awayScore, dateProvider.getLocalDateTime());
         games.add(updatedGame);
     }
 
     public List<Game> getSummary() {
-        return games;
+        return games.stream()
+            .sorted(
+                Comparator.comparingInt(
+                        (Game g) -> g.getHomeScore() + g.getAwayScore()
+                    ).reversed()
+                    .thenComparing(Game::getLastUpdatedAt, Comparator.reverseOrder())
+            )
+            .collect(Collectors.toList());
     }
 
     private void validateTeamsUniqueness(final String homeTeam, final String awayTeam) {

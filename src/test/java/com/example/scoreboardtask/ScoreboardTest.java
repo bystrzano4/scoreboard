@@ -5,9 +5,7 @@ import com.example.scoreboardtask.scoreboard.Game;
 import com.example.scoreboardtask.scoreboard.Scoreboard;
 import com.example.scoreboardtask.scoreboard.error.*;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -78,7 +76,10 @@ public class ScoreboardTest {
         scoreboard.startGame("Albania", "Croatia");
 
         // when & then
-        final GameNotFoundException gameNotFoundException = assertThrows(GameNotFoundException.class, () -> scoreboard.finishGame("Brazil", "Poland"));
+        final GameNotFoundException gameNotFoundException = assertThrows(
+            GameNotFoundException.class,
+            () -> scoreboard.finishGame("Brazil", "Poland")
+        );
         final String message = gameNotFoundException.getMessage();
         assertThat(message).isEqualTo("Game not found: Brazil vs Poland");
     }
@@ -125,8 +126,9 @@ public class ScoreboardTest {
     @Test
     void getSummary_shouldReturnGamesInCorrectOrder() {
         // given
-        mockDateTime();
-        final Scoreboard scoreboard = new Scoreboard();
+        final DateProvider dateProvider = Mockito.mock(DateProvider.class);
+        mockDateTime(dateProvider);
+        final Scoreboard scoreboard = new Scoreboard(dateProvider);
         scoreboard.startGame("Mexico", "Canada");
         scoreboard.startGame("Spain", "Brazil");
         scoreboard.startGame("Germany", "France");
@@ -140,18 +142,17 @@ public class ScoreboardTest {
 
         // then
         assertThat(summary.size()).isEqualTo(4);
-        assertThat(summary.get(0).getHomeTeam()).isEqualTo("Spain");
-        assertThat(summary.get(0).getAwayTeam()).isEqualTo("Brazil");
-        assertThat(summary.get(1).getHomeTeam()).isEqualTo("Belarus");
-        assertThat(summary.get(1).getAwayTeam()).isEqualTo("USA");
+        assertThat(summary.get(0).getHomeTeam()).isEqualTo("Belarus");
+        assertThat(summary.get(0).getAwayTeam()).isEqualTo("USA");
+        assertThat(summary.get(1).getHomeTeam()).isEqualTo("Spain");
+        assertThat(summary.get(1).getAwayTeam()).isEqualTo("Brazil");
         assertThat(summary.get(2).getHomeTeam()).isEqualTo("Mexico");
         assertThat(summary.get(2).getAwayTeam()).isEqualTo("Canada");
         assertThat(summary.get(3).getHomeTeam()).isEqualTo("Germany");
-        assertThat(summary.get(3).getHomeTeam()).isEqualTo("France");
+        assertThat(summary.get(3).getAwayTeam()).isEqualTo("France");
     }
 
-    private static void mockDateTime() {
-        final DateProvider dateProvider = Mockito.mock(DateProvider.class);
+    private static void mockDateTime(final DateProvider dateProvider) {
         final LocalDateTime localDateTime = LocalDateTime.of(2025, 1, 1, 12, 0);
         when(dateProvider.getLocalDateTime())
             .thenReturn(localDateTime)
