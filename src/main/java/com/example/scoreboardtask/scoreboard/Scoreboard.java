@@ -17,10 +17,11 @@ public class Scoreboard {
     }
 
     public void finishGame(String homeTeam, String awayTeam) {
-        if (games.stream().noneMatch(game -> game.getHomeTeam().equals(homeTeam) && game.getAwayTeam().equals(awayTeam))) {
-            throw new GameNotFoundException("Game not found: " + homeTeam + " vs " + awayTeam);
-        }
-        games.removeIf(game -> game.getHomeTeam().equals(homeTeam) && game.getAwayTeam().equals(awayTeam));
+        final Game game = games.stream()
+            .filter(g -> g.getHomeTeam().equals(homeTeam) && g.getAwayTeam().equals(awayTeam))
+            .findFirst()
+            .orElseThrow(() -> new GameNotFoundException("Game not found: " + homeTeam + " vs " + awayTeam));
+        games.remove(game);
     }
 
     public List<Game> getSummary() {
