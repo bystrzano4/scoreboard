@@ -1,7 +1,5 @@
 package com.example.scoreboardtask.date;
 
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
 public class DateProvider {
