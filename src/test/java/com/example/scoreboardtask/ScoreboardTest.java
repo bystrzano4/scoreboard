@@ -2,8 +2,7 @@ package com.example.scoreboardtask;
 
 import com.example.scoreboardtask.scoreboard.Game;
 import com.example.scoreboardtask.scoreboard.Scoreboard;
-import com.example.scoreboardtask.scoreboard.error.DuplicatedTeamNameException;
-import com.example.scoreboardtask.scoreboard.error.GameNotFoundException;
+import com.example.scoreboardtask.scoreboard.error.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -103,7 +102,12 @@ public class ScoreboardTest {
 
     @Test
     void updateScore_invalidScore_shouldThrowException() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
+        scoreboard.startGame("Mexico", "Poland");
 
+        // when & then
+        assertThrows(InvalidScoreException.class, () -> scoreboard.updateScore("Mexico", "Poland", 1, -1));
     }
 
     @Test
