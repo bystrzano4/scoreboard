@@ -2,6 +2,7 @@ package com.example.scoreboardtask;
 
 import com.example.scoreboardtask.scoreboard.Game;
 import com.example.scoreboardtask.scoreboard.Scoreboard;
+import com.example.scoreboardtask.scoreboard.error.DuplicatedTeamNameException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class ScoreboardTest {
         scoreboard.startGame("Mexico", "Poland");
 
         // then
-        assertThrows(Exception.class, () -> scoreboard.startGame("Mexico", "Brazil"));
+        assertThrows(DuplicatedTeamNameException.class, () -> scoreboard.startGame("Mexico", "Brazil"));
     }
 
     @Test
