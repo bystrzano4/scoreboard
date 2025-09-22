@@ -1,6 +1,7 @@
 package com.example.scoreboardtask.scoreboard;
 
 import com.example.scoreboardtask.scoreboard.error.DuplicatedTeamNameException;
+import com.example.scoreboardtask.scoreboard.error.GameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,20 +11,23 @@ public class Scoreboard {
     private final List<Game> games = new ArrayList<>();
 
     public void startGame(String homeTeam, String awayTeam) {
-        validateTeams(homeTeam, awayTeam);
+        validateTeamsUniqueness(homeTeam, awayTeam);
         final Game game = new Game(homeTeam, awayTeam, 0, 0);
         games.add(game);
     }
 
     public void finishGame(String homeTeam, String awayTeam) {
-        games.removeIf(game -> game.getHomeTeam().equals(homeTeam) || game.getAwayTeam().equals(awayTeam));
+        if (games.stream().noneMatch(game -> game.getHomeTeam().equals(homeTeam) && game.getAwayTeam().equals(awayTeam))) {
+            throw new GameNotFoundException("Game not found: " + homeTeam + " vs " + awayTeam);
+        }
+        games.removeIf(game -> game.getHomeTeam().equals(homeTeam) && game.getAwayTeam().equals(awayTeam));
     }
 
     public List<Game> getSummary() {
         return games;
     }
 
-    private void validateTeams(final String homeTeam, final String awayTeam) {
+    private void validateTeamsUniqueness(final String homeTeam, final String awayTeam) {
         final List<String> duplicatedNames = new ArrayList<>();
         addDuplicatedTeam(homeTeam, duplicatedNames);
         addDuplicatedTeam(awayTeam, duplicatedNames);

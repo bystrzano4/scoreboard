@@ -77,7 +77,9 @@ public class ScoreboardTest {
         scoreboard.startGame("Albania", "Croatia");
 
         // then
-        assertThrows(GameNotFoundException.class, () -> scoreboard.finishGame("Brazil", "Poland"));
+        final GameNotFoundException gameNotFoundException = assertThrows(GameNotFoundException.class, () -> scoreboard.finishGame("Brazil", "Poland"));
+        final String message = gameNotFoundException.getMessage();
+        assertThat(message).isEqualTo("Game not found: Brazil vs Poland");
     }
 
     @Test
