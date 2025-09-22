@@ -1,8 +1,6 @@
-package com.example.scoreboardtask;
+package com.example.scoreboardtask.scoreboard;
 
 import com.example.scoreboardtask.date.DateProvider;
-import com.example.scoreboardtask.scoreboard.Game;
-import com.example.scoreboardtask.scoreboard.Scoreboard;
 import com.example.scoreboardtask.scoreboard.error.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
