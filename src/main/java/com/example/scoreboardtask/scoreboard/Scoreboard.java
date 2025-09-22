@@ -7,12 +7,16 @@ import java.util.List;
 
 public class Scoreboard {
 
-    private List<Game> games = new ArrayList<>();
+    private final List<Game> games = new ArrayList<>();
 
     public void startGame(String homeTeam, String awayTeam) {
         validateTeams(homeTeam, awayTeam);
         final Game game = new Game(homeTeam, awayTeam, 0, 0);
         games.add(game);
+    }
+
+    public void finishGame(String homeTeam, String awayTeam) {
+
     }
 
     public List<Game> getSummary() {

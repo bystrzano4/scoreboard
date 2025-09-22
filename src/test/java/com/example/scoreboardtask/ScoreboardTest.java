@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ScoreboardTest {
 
@@ -50,7 +51,19 @@ public class ScoreboardTest {
 
     @Test
     void finishGame_shouldRemoveGameFromScoreboardSuccessfully() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
 
+        // when
+        scoreboard.startGame("Mexico", "Poland");
+        scoreboard.startGame("Albania", "Croatia");
+        scoreboard.finishGame("Mexico", "Poland");
+
+        // then
+        final List<Game> summary = scoreboard.getSummary();
+        assertThat(summary.size()).isEqualTo(1);
+        assertTrue(summary.stream().noneMatch(game ->
+            game.getHomeTeam().equals("Mexico") && game.getAwayTeam().equals("Poland")));
     }
 
     @Test
