@@ -17,15 +17,15 @@ public class Scoreboard {
     }
 
     public void finishGame(String homeTeam, String awayTeam) {
-        final Game game = games.stream()
-            .filter(g -> g.getHomeTeam().equals(homeTeam) && g.getAwayTeam().equals(awayTeam))
-            .findFirst()
-            .orElseThrow(() -> new GameNotFoundException("Game not found: " + homeTeam + " vs " + awayTeam));
+        final Game game = findGameByHomeAndAwayTeam(homeTeam, awayTeam);
         games.remove(game);
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-
+        final Game game = findGameByHomeAndAwayTeam(homeTeam, awayTeam);
+        games.remove(game);
+        final Game updatedGame = new Game(homeTeam, awayTeam, homeScore, awayScore);
+        games.add(updatedGame);
     }
 
     public List<Game> getSummary() {
@@ -46,6 +46,13 @@ public class Scoreboard {
             game -> game.getHomeTeam().equals(homeTeam) || game.getAwayTeam().equals(homeTeam))) {
             duplicatedNames.add(homeTeam);
         }
+    }
+
+    private Game findGameByHomeAndAwayTeam(final String homeTeam, final String awayTeam) {
+        return games.stream()
+            .filter(g -> g.getHomeTeam().equals(homeTeam) && g.getAwayTeam().equals(awayTeam))
+            .findFirst()
+            .orElseThrow(() -> new GameNotFoundException("Game not found: " + homeTeam + " vs " + awayTeam));
     }
 
 }
