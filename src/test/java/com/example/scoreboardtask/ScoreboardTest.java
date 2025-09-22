@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ScoreboardTest {
 
@@ -31,7 +32,14 @@ public class ScoreboardTest {
 
     @Test
     void startGame_givenDuplicatedTeamNames_shouldThrowException() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
 
+        // when
+        scoreboard.startGame("Mexico", "Poland");
+
+        // then
+        assertThrows(Exception.class, () -> scoreboard.startGame("Mexico", "Brazil"));
     }
 
     @Test
