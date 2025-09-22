@@ -3,6 +3,7 @@ package com.example.scoreboardtask;
 import com.example.scoreboardtask.scoreboard.Game;
 import com.example.scoreboardtask.scoreboard.Scoreboard;
 import com.example.scoreboardtask.scoreboard.error.DuplicatedTeamNameException;
+import com.example.scoreboardtask.scoreboard.error.GameNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -68,7 +69,15 @@ public class ScoreboardTest {
 
     @Test
     void finishGame_givenNonExistingTeamName_shouldThrowException() {
+        // given
+        final Scoreboard scoreboard = new Scoreboard();
 
+        // when
+        scoreboard.startGame("Mexico", "Poland");
+        scoreboard.startGame("Albania", "Croatia");
+
+        // then
+        assertThrows(GameNotFoundException.class, () -> scoreboard.finishGame("Brazil", "Poland"));
     }
 
     @Test
