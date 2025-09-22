@@ -1,15 +1,21 @@
 package com.example.scoreboardtask;
 
+import com.example.scoreboardtask.date.DateProvider;
 import com.example.scoreboardtask.scoreboard.Game;
 import com.example.scoreboardtask.scoreboard.Scoreboard;
 import com.example.scoreboardtask.scoreboard.error.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class ScoreboardTest {
 
@@ -119,6 +125,7 @@ public class ScoreboardTest {
     @Test
     void getSummary_shouldReturnGamesInCorrectOrder() {
         // given
+        mockDateTime();
         final Scoreboard scoreboard = new Scoreboard();
         scoreboard.startGame("Mexico", "Canada");
         scoreboard.startGame("Spain", "Brazil");
@@ -141,5 +148,18 @@ public class ScoreboardTest {
         assertThat(summary.get(2).getAwayTeam()).isEqualTo("Canada");
         assertThat(summary.get(3).getHomeTeam()).isEqualTo("Germany");
         assertThat(summary.get(3).getHomeTeam()).isEqualTo("France");
+    }
+
+    private static void mockDateTime() {
+        final DateProvider dateProvider = Mockito.mock(DateProvider.class);
+        final LocalDateTime localDateTime = LocalDateTime.of(2025, 1, 1, 12, 0);
+        when(dateProvider.getLocalDateTime())
+            .thenReturn(localDateTime)
+            .thenReturn(localDateTime.plusHours(1))
+            .thenReturn(localDateTime.plusHours(2))
+            .thenReturn(localDateTime.plusHours(3))
+            .thenReturn(localDateTime.plusHours(4))
+            .thenReturn(localDateTime.plusHours(5))
+            .thenReturn(localDateTime.plusHours(6));
     }
 }
