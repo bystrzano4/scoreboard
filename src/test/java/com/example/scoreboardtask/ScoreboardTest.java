@@ -36,11 +36,9 @@ public class ScoreboardTest {
     void startGame_givenDuplicatedTeamNames_shouldThrowDuplicatedTeamNameException() {
         // given
         final Scoreboard scoreboard = new Scoreboard();
-
-        // when
         scoreboard.startGame("Mexico", "Poland");
 
-        // then
+        // when & then
         final DuplicatedTeamNameException duplicatedTeamNameException = assertThrows(
             DuplicatedTeamNameException.class,
             () -> scoreboard.startGame("Poland", "Mexico")
@@ -70,12 +68,10 @@ public class ScoreboardTest {
     void finishGame_givenNonExistingTeamName_shouldThrowException() {
         // given
         final Scoreboard scoreboard = new Scoreboard();
-
-        // when
         scoreboard.startGame("Mexico", "Poland");
         scoreboard.startGame("Albania", "Croatia");
 
-        // then
+        // when & then
         final GameNotFoundException gameNotFoundException = assertThrows(GameNotFoundException.class, () -> scoreboard.finishGame("Brazil", "Poland"));
         final String message = gameNotFoundException.getMessage();
         assertThat(message).isEqualTo("Game not found: Brazil vs Poland");
